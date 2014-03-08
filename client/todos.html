@@ -53,7 +53,7 @@
 </template>
 
 <template name="todos">
-  <div id="items-view">
+  <div id="items-view" data-list-id="{{ list_id }}">
     {{#if loading}}
       Loading...
     {{else}}

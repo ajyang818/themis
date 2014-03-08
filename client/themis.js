@@ -185,6 +185,10 @@ Template.todos.any_list_selected = function () {
   return true;
 };
 
+Template.todos.list_id = function() {
+  return this.list_id;
+}
+
 // Events
 
 Template.todos.events(okCancelEvents(
@@ -193,7 +197,7 @@ Template.todos.events(okCancelEvents(
     ok: function (text, evt) {
       Todos.insert({
         text: text,
-        list_id: Session.get('list_id'),
+        list_id: this.list_id,
         done: false,
         timestamp: (new Date()).getTime(),
         test: false
