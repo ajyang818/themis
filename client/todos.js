@@ -4,6 +4,9 @@
 Lists = new Meteor.Collection("lists");
 Todos = new Meteor.Collection("todos");
 
+DateLists = new Meteor.Collection('dateLists');
+DateTodos = new Meteor.Collection('dateTodos');
+
 // ID of currently selected list
 Session.setDefault('list_id', null);
 
@@ -22,6 +25,24 @@ var listsHandle = Meteor.subscribe('lists', function () {
       Router.setList(list._id);
   }
 });
+
+var dateListsHandle = Meteor.subscribe('dateLists', function () {
+  var today = new Date();
+  today.setHours(0, 0, 0, 0);
+  for (var ind = 0; ind <= 7; ind++) {
+    var dateToCheck = new Date(today.getYear(), today.getMonth(), today.getDate() + ind);
+    if (!(DateLists.find({date: dateToCheck}).count())) {
+      DateLists.insert({
+        date: dateToCheck,
+        type: "life"
+      });
+      DateLists.insert({
+        date: dateToCheck,
+        type: "work"
+      });
+    }
+  }
+})
 
 var todosHandle = null;
 // Always be subscribed to the todos for the selected list.
@@ -153,6 +174,7 @@ Template.todos.events(okCancelEvents(
         list_id: Session.get('list_id'),
         done: false,
         timestamp: (new Date()).getTime(),
+        test: false,
         // tags: tag ? [tag] : []
       });
       evt.target.value = '';

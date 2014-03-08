@@ -6,6 +6,13 @@ Meteor.publish('lists', function () {
   return Lists.find();
 });
 
+// DateLists -- {date: Date,
+//              type: String}
+DateLists = new Meteor.Collection("dateLists");
+
+Meteor.publish("dateLists", function() {
+    return DateLists.find();
+});
 
 // Todos -- {text: String,
 //           done: Boolean,
@@ -20,3 +27,14 @@ Meteor.publish('todos', function (list_id) {
   return Todos.find({list_id: list_id});
 });
 
+// DateTodos -- {text: String,
+//               done: Boolean,
+//               type: String,
+//               list_date: Date}
+DateTodos = new Meteor.Collection("dateToDos");
+
+Meteor.publish('dateTodos', function (list_date, type) {
+    check(list_date, Date);
+    check(type, String);
+    return DateTodos.find({list_date: list_date, type: type});
+});
