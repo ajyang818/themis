@@ -3,10 +3,6 @@
 </head>
 
 <body>
-  <div id="top-tag-filter">
-    {{> tag_filter}}
-  </div>
-
   <div id="main-pane">
     {{> todo_panels}}
   </div>
@@ -54,9 +50,6 @@
     <div class="todo-panel-title">{{ all_panels.bottom.list_name }}</div>
     {{> todos all_panels.bottom }}
   </div>
-  <!-- {{#each panels}}
-    {{> todos this }}
-  {{/each}} -->
 </template>
 
 <template name="todos">
@@ -89,33 +82,5 @@
         <div class="todo-text">{{text}}</div>
       </div>
     {{/if}}
-    <div class="item-tags">
-      {{#each tag_objs}}
-        <div class="tag removable_tag">
-          <div class="name">{{tag}}</div>
-          <div class="remove"></div>
-        </div>
-      {{/each}}
-      {{#if adding_tag}}
-        <div class="tag edittag">
-          <input type="text" id="edittag-input" value="" />
-        </div>
-      {{else}}
-        <div class="tag addtag">
-          +tag
-        </div>
-      {{/if}}
-    </div>
   </li>
-</template>
-
-<template name="tag_filter">
-  <div id="tag-filter" class="tag-list">
-    <div class="label">Show:</div>
-    {{#each tags}}
-      <div class="tag {{selected}}">
-        {{tag_text}} <span class="count">({{count}})</span>
-      </div>
-    {{/each}}
-  </div>
 </template>

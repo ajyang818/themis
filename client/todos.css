@@ -60,7 +60,7 @@ h3 {
 }
 
 #main-pane {
-    top: 45px;
+    /*top: 45px;*/
     bottom: 0;
     left: 220px;
     overflow: auto;
@@ -78,6 +78,7 @@ h3 {
     top: 500px;
     left: 220px;
     overflow: auto;
+    border-top: 1px solid #999;
 }
 
 .todo-panel-title {

@@ -7,12 +7,6 @@ Todos = new Meteor.Collection("todos");
 // ID of currently selected list
 Session.setDefault('list_id', null);
 
-// Name of currently selected tag for filtering
-Session.setDefault('tag_filter', null);
-
-// When adding tag to a todo, ID of the todo
-Session.setDefault('editing_addtag', null);
-
 // When editing a list name, ID of the list
 Session.setDefault('editing_listname', null);
 
@@ -153,13 +147,13 @@ Template.todos.events(okCancelEvents(
   '#new-todo',
   {
     ok: function (text, evt) {
-      var tag = Session.get('tag_filter');
+      // var tag = Session.get('tag_filter');
       Todos.insert({
         text: text,
         list_id: Session.get('list_id'),
         done: false,
         timestamp: (new Date()).getTime(),
-        tags: tag ? [tag] : []
+        // tags: tag ? [tag] : []
       });
       evt.target.value = '';
     }
@@ -191,12 +185,12 @@ Template.todos.todos = function () {
   return Todos.find({list_id: this['list_id']}, {sort: {timestamp: 1}});
 };
 
-Template.todo_item.tag_objs = function () {
-  var todo_id = this._id;
-  return _.map(this.tags || [], function (tag) {
-    return {todo_id: todo_id, tag: tag};
-  });
-};
+// Template.todo_item.tag_objs = function () {
+//   var todo_id = this._id;
+//   return _.map(this.tags || [], function (tag) {
+//     return {todo_id: todo_id, tag: tag};
+//   });
+// };
 
 Template.todo_item.done_class = function () {
   return this.done ? 'done' : '';
@@ -210,9 +204,9 @@ Template.todo_item.editing = function () {
   return Session.equals('editing_itemname', this._id);
 };
 
-Template.todo_item.adding_tag = function () {
-  return Session.equals('editing_addtag', this._id);
-};
+// Template.todo_item.adding_tag = function () {
+//   return Session.equals('editing_addtag', this._id);
+// };
 
 Template.todo_item.events({
   'click .check': function () {
@@ -223,11 +217,11 @@ Template.todo_item.events({
     Todos.remove(this._id);
   },
 
-  'click .addtag': function (evt, tmpl) {
-    Session.set('editing_addtag', this._id);
-    Deps.flush(); // update DOM before focus
-    activateInput(tmpl.find("#edittag-input"));
-  },
+  // 'click .addtag': function (evt, tmpl) {
+  //   Session.set('editing_addtag', this._id);
+  //   Deps.flush(); // update DOM before focus
+  //   activateInput(tmpl.find("#edittag-input"));
+  // },
 
   'dblclick .display .todo-text': function (evt, tmpl) {
     Session.set('editing_itemname', this._id);
@@ -235,16 +229,16 @@ Template.todo_item.events({
     activateInput(tmpl.find("#todo-input"));
   },
 
-  'click .remove': function (evt) {
-    var tag = this.tag;
-    var id = this.todo_id;
+  // 'click .remove': function (evt) {
+  //   var tag = this.tag;
+  //   var id = this.todo_id;
 
-    evt.target.parentNode.style.opacity = 0;
-    // wait for CSS animation to finish
-    Meteor.setTimeout(function () {
-      Todos.update({_id: id}, {$pull: {tags: tag}});
-    }, 300);
-  }
+  //   evt.target.parentNode.style.opacity = 0;
+  //   // wait for CSS animation to finish
+  //   Meteor.setTimeout(function () {
+  //     Todos.update({_id: id}, {$pull: {tags: tag}});
+  //   }, 300);
+  // }
 });
 
 Template.todo_item.events(okCancelEvents(
@@ -259,58 +253,17 @@ Template.todo_item.events(okCancelEvents(
     }
   }));
 
-Template.todo_item.events(okCancelEvents(
-  '#edittag-input',
-  {
-    ok: function (value) {
-      Todos.update(this._id, {$addToSet: {tags: value}});
-      Session.set('editing_addtag', null);
-    },
-    cancel: function () {
-      Session.set('editing_addtag', null);
-    }
-  }));
-
-////////// Tag Filter //////////
-
-// Pick out the unique tags from all todos in current list.
-Template.tag_filter.tags = function () {
-  var tag_infos = [];
-  var total_count = 0;
-
-  Todos.find({list_id: Session.get('list_id')}).forEach(function (todo) {
-    _.each(todo.tags, function (tag) {
-      var tag_info = _.find(tag_infos, function (x) { return x.tag === tag; });
-      if (! tag_info)
-        tag_infos.push({tag: tag, count: 1});
-      else
-        tag_info.count++;
-    });
-    total_count++;
-  });
-
-  tag_infos = _.sortBy(tag_infos, function (x) { return x.tag; });
-  tag_infos.unshift({tag: null, count: total_count});
-
-  return tag_infos;
-};
-
-Template.tag_filter.tag_text = function () {
-  return this.tag || "All items";
-};
-
-Template.tag_filter.selected = function () {
-  return Session.equals('tag_filter', this.tag) ? 'selected' : '';
-};
-
-Template.tag_filter.events({
-  'mousedown .tag': function () {
-    if (Session.equals('tag_filter', this.tag))
-      Session.set('tag_filter', null);
-    else
-      Session.set('tag_filter', this.tag);
-  }
-});
+// Template.todo_item.events(okCancelEvents(
+//   '#edittag-input',
+//   {
+//     ok: function (value) {
+//       Todos.update(this._id, {$addToSet: {tags: value}});
+//       Session.set('editing_addtag', null);
+//     },
+//     cancel: function () {
+//       Session.set('editing_addtag', null);
+//     }
+//   }));
 
 ////////// Tracking selected list in URL //////////
 
@@ -323,7 +276,7 @@ var TodosRouter = Backbone.Router.extend({
     if (oldList !== list_id) {
       Session.set("list_id", list_id);
       Session.set("list_id_bot", 'NQkynAC2jNgWiTgG9');
-      Session.set("tag_filter", null);
+      // Session.set("tag_filter", null);
     }
   },
   setList: function (list_id) {
