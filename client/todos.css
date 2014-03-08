@@ -38,7 +38,7 @@ h3 {
     text-align: center;
 }
 
-#top-tag-filter, #main-pane, #side-pane, #bottom-pane {
+#top-tag-filter, #main-pane, #main-pane, #side-pane, #bottom-pane {
     position: absolute;
     left: 0;
     right: 0;
@@ -64,6 +64,26 @@ h3 {
     bottom: 0;
     left: 220px;
     overflow: auto;
+}
+
+#todo-panel-top {
+    height: 50%;
+    top: 0px;
+    left: 220px;
+    overflow: auto;
+}
+
+#todo-panel-bottom {
+    height: 50%;
+    top: 500px;
+    left: 220px;
+    overflow: auto;
+}
+
+.todo-panel-title {
+    text-align: center;
+    margin-top: 5px;
+    font-weight: bold;
 }
 
 #side-pane {

@@ -8,7 +8,7 @@
   </div>
 
   <div id="main-pane">
-    {{> todos}}
+    {{> todo_panels}}
   </div>
 
   <div id="side-pane">
@@ -44,23 +44,36 @@
   {{/if}}
 </template>
 
+<template name="todo_panels">
+  <div id="todo-panel-top">
+    <div class="todo-panel-title">{{ all_panels.top.list_name }}</div>
+    {{> todos all_panels.top }}
+  </div>
+
+  <div id="todo-panel-bottom">
+    <div class="todo-panel-title">{{ all_panels.bottom.list_name }}</div>
+    {{> todos all_panels.bottom }}
+  </div>
+  <!-- {{#each panels}}
+    {{> todos this }}
+  {{/each}} -->
+</template>
+
 <template name="todos">
-  {{#if any_list_selected}}
-    <div id="items-view">
-      {{#if loading}}
-        Loading...
-      {{else}}
-        <div id="new-todo-box">
-          <input type="text" id="new-todo" placeholder="New item" />
-        </div>
-        <ul id="item-list">
-          {{#each todos}}
-            {{> todo_item}}
-          {{/each}}
-        </ul>
-      {{/if}}
-    </div>
-  {{/if}}
+  <div id="items-view">
+    {{#if loading}}
+      Loading...
+    {{else}}
+      <div id="new-todo-box">
+        <input type="text" id="new-todo" placeholder="New item" />
+      </div>
+      <ul id="item-list">
+        {{#each todos}}
+          {{> todo_item}}
+        {{/each}}
+      </ul>
+    {{/if}}
+  </div>
 </template>
 
 <template name="todo_item">

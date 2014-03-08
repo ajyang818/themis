@@ -32,10 +32,12 @@ var listsHandle = Meteor.subscribe('lists', function () {
 var todosHandle = null;
 // Always be subscribed to the todos for the selected list.
 Deps.autorun(function () {
-  var list_id = Session.get('list_id');
-  if (list_id)
+  var list_id = Session.get('list_id'),
+      list_id_bot = Session.get('list_id_bot');
+  if (list_id) {
     todosHandle = Meteor.subscribe('todos', list_id);
-  else
+    todosHandleBot = Meteor.subscribe('todos', list_id_bot);
+  } else
     todosHandle = null;
 });
 
@@ -138,11 +140,13 @@ Template.lists.editing = function () {
 ////////// Todos //////////
 
 Template.todos.loading = function () {
-  return todosHandle && !todosHandle.ready();
+  // return todosHandle && !todosHandle.ready();
+  return false;
 };
 
 Template.todos.any_list_selected = function () {
-  return !Session.equals('list_id', null);
+  // return !Session.equals('list_id', null);
+  return true;
 };
 
 Template.todos.events(okCancelEvents(
@@ -161,20 +165,30 @@ Template.todos.events(okCancelEvents(
     }
   }));
 
+Template.todo_panels.all_panels = function () {
+  // Returns the set of all panels that are going to be shown
+  // Should be divided into top, bottom
+
+  var list_id_top = Session.get('list_id'),
+      list_id_bot = Session.get('list_id_bot');
+
+  var returnArray = {
+    'top': {
+      'list_name': 'Top List',
+      'list_id': list_id_top
+    },
+    'bottom': {
+      'list_name': 'Bottom List',
+      'list_id': list_id_bot
+    }
+  };
+
+  return returnArray;
+};
+
 Template.todos.todos = function () {
-  // Determine which todos to display in main pane,
-  // selected based on list_id and tag_filter.
-
-  var list_id = Session.get('list_id');
-  if (!list_id)
-    return {};
-
-  var sel = {list_id: list_id};
-  var tag_filter = Session.get('tag_filter');
-  if (tag_filter)
-    sel.tags = tag_filter;
-
-  return Todos.find(sel, {sort: {timestamp: 1}});
+  // Given a list_id, returns the Todos of that list
+  return Todos.find({list_id: this['list_id']}, {sort: {timestamp: 1}});
 };
 
 Template.todo_item.tag_objs = function () {
@@ -308,6 +322,7 @@ var TodosRouter = Backbone.Router.extend({
     var oldList = Session.get("list_id");
     if (oldList !== list_id) {
       Session.set("list_id", list_id);
+      Session.set("list_id_bot", 'NQkynAC2jNgWiTgG9');
       Session.set("tag_filter", null);
     }
   },
