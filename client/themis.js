@@ -25,7 +25,7 @@ var TodosRouter = Backbone.Router.extend({
   main: function (list_id) {
     var oldList = Session.get("list_id");
     if (oldList !== list_id) {
-      Session.set("list_id", "6d3fw2tGbabwc9reG");  // Hard-codes!!
+      Session.set("list_id", "msLZZBvp6ugyeSpoG");  // Hard-codes!!
       Session.set("list_id_bot", 'NQkynAC2jNgWiTgG9');
     }
   },
@@ -75,8 +75,8 @@ Deps.autorun(function () {
   var list_id = Session.get('list_id'),
       list_id_bot = Session.get('list_id_bot');
   if (list_id) {
-    todosHandle = Meteor.subscribe('todos', list_id);
-    todosHandleBot = Meteor.subscribe('todos', list_id_bot);
+    todosHandle = Meteor.subscribe('todos', [list_id, list_id_bot]);
+    // todosHandleBot = Meteor.subscribe('todos', list_id_bot);
   } else
     todosHandle = null;
 });

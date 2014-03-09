@@ -20,7 +20,7 @@ Meteor.publish('lists', function () {
 Todos = new Meteor.Collection("todos");
 
 // Publish all items for requested list_id.
-Meteor.publish('todos', function (list_id) {
-  check(list_id, String);
-  return Todos.find({list_id: list_id});
+Meteor.publish('todos', function (list_ids) {
+  check(list_ids, Array);
+  return Todos.find({list_id: {$in: list_ids}});
 });
