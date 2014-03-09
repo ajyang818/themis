@@ -4,9 +4,6 @@
 Lists = new Meteor.Collection("lists");
 Todos = new Meteor.Collection("todos");
 
-DateLists = new Meteor.Collection('dateLists');
-DateTodos = new Meteor.Collection('dateTodos');
-
 // ID of currently selected list
 Session.setDefault('list_id', null);
 
@@ -15,6 +12,9 @@ Session.setDefault('editing_listname', null);
 
 // When editing todo text, ID of the todo
 Session.setDefault('editing_itemname', null);
+
+
+
 
 ////////// Tracking selected list in URL //////////
 
@@ -25,7 +25,7 @@ var TodosRouter = Backbone.Router.extend({
   main: function (list_id) {
     var oldList = Session.get("list_id");
     if (oldList !== list_id) {
-      Session.set("list_id", list_id);
+      Session.set("list_id", "6d3fw2tGbabwc9reG");  // Hard-codes!!
       Session.set("list_id_bot", 'NQkynAC2jNgWiTgG9');
     }
   },
@@ -43,29 +43,30 @@ Meteor.startup(function () {
 // Subscribe to 'lists' collection on startup.
 // Select a list once data has arrived.
 var listsHandle = Meteor.subscribe('lists', function () {
+
   if (!Session.get('list_id')) {
     var list = Lists.findOne({}, {sort: {name: 1}});
     if (list)
       Router.setList(list._id);
   }
-});
 
-var dateListsHandle = Meteor.subscribe('dateLists', function () {
+  // Create new date-centered lists depending on the day
   var today = new Date();
   today.setHours(0, 0, 0, 0);
   for (var ind = 0; ind <= 7; ind++) {
-    var dateToCheck = new Date(today.getYear(), today.getMonth(), today.getDate() + ind);
-    if (!(DateLists.find({date: dateToCheck}).count())) {
-      DateLists.insert({
-        date: dateToCheck,
-        type: "life"
-      });
-      DateLists.insert({
-        date: dateToCheck,
-        type: "work"
+
+    var dateToCheck = new Date(today.getFullYear(), today.getMonth(), today.getDate() + ind);
+    var dateSlug = moment(dateToCheck).format("YYYYMMDD");
+
+    if (!(Lists.find({date_list: true, slug: dateSlug}).count())) {
+      Lists.insert({
+        name: moment(dateToCheck).format("ddd - MMM D, YYYY"),
+        date_list: true,
+        slug: dateSlug,
       });
     }
   }
+
 });
 
 var todosHandle = null;
@@ -81,6 +82,8 @@ Deps.autorun(function () {
 });
 
 
+
+
 ////////// Lists //////////
 
 // Template Logic
@@ -90,7 +93,7 @@ Template.lists.loading = function () {
 };
 
 Template.lists.lists = function () {
-  return Lists.find({}, {sort: {name: 1}});
+  return Lists.find({});
 };
 
 Template.lists.selected = function () {
@@ -145,22 +148,36 @@ Template.lists.events(okCancelEvents(
     }
   }));
 
+
+
+
 ////////// Panels + Lists //////////
 
 // Template Logic
 
-Template.todo_panels.all_panels = function () {
+Template.date_list_panels.all_panels = function () {
   // Returns the set of all panels that are going to be shown
   // Should be divided into top, bottom
+
+  var today = new Date();
+  var dateSlug = moment(today).format("YYYYMMDD");
+
+  var todaysList = Lists.findOne({date_list: true, slug: dateSlug});
+
+  if (!(todaysList)) {
+    return {};
+  } else {
+    topArray = {
+      'list_name': todaysList.name,
+      'list_id': todaysList._id
+    };
+  }
 
   var list_id_top = Session.get('list_id'),
       list_id_bot = Session.get('list_id_bot');
 
   var returnArray = {
-    'top': {
-      'list_name': 'Top List',
-      'list_id': list_id_top
-    },
+    'top': topArray,
     'bottom': {
       'list_name': 'Bottom List',
       'list_id': list_id_bot
@@ -170,28 +187,28 @@ Template.todo_panels.all_panels = function () {
   return returnArray;
 };
 
-Template.todos.todos = function () {
+Template.indiv_list.todos = function () {
   // Given a list_id, returns the Todos of that list
-  return Todos.find({list_id: this['list_id']}, {sort: {timestamp: 1}});
+  return Todos.find({list_id: this.list_id});
 };
 
-Template.todos.loading = function () {
+Template.indiv_list.loading = function () {
   // return todosHandle && !todosHandle.ready();
   return false;
 };
 
-Template.todos.any_list_selected = function () {
+Template.indiv_list.any_list_selected = function () {
   // return !Session.equals('list_id', null);
   return true;
 };
 
-Template.todos.list_id = function() {
+Template.indiv_list.list_id = function() {
   return this.list_id;
-}
+};
 
 // Events
 
-Template.todos.events(okCancelEvents(
+Template.indiv_list.events(okCancelEvents(
   '#new-todo',
   {
     ok: function (text, evt) {
@@ -205,6 +222,9 @@ Template.todos.events(okCancelEvents(
       evt.target.value = '';
     }
   }));
+
+
+
 
 ////////// Todo Items //////////
 

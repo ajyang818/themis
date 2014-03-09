@@ -4,13 +4,14 @@
 
 <body>
   <div id="main-pane">
-    {{> todo_panels}}
+    {{> date_list_panels }}
   </div>
 
   <div id="side-pane">
     {{> lists}}
   </div>
 </body>
+
 
 <template name="lists">
   <h3>Todo Lists</h3>
@@ -40,20 +41,22 @@
   {{/if}}
 </template>
 
-<template name="todo_panels">
+
+<template name="date_list_panels">
   <div id="todo-panel-top">
     <div class="todo-panel-title">{{ all_panels.top.list_name }}</div>
-    {{> todos all_panels.top }}
+    {{> indiv_list all_panels.top }}
   </div>
 
   <div id="todo-panel-bottom">
     <div class="todo-panel-title">{{ all_panels.bottom.list_name }}</div>
-    {{> todos all_panels.bottom }}
+    {{> indiv_list all_panels.bottom }}
   </div>
 </template>
 
-<template name="todos">
-  <div id="items-view" data-list-id="{{ list_id }}">
+
+<template name="indiv_list">
+  <div id="items-view" data-list-slug="{{ list_id }}">
     {{#if loading}}
       Loading...
     {{else}}
@@ -68,6 +71,7 @@
     {{/if}}
   </div>
 </template>
+
 
 <template name="todo_item">
   <li class="todo {{done_class}}">
