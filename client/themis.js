@@ -5,7 +5,7 @@ Lists = new Meteor.Collection("lists");
 Todos = new Meteor.Collection("todos");
 
 // ID of currently selected list
-Session.setDefault('list_id', null);
+Session.setDefault('list_ids', null);
 
 // When editing a list name, ID of the list
 Session.setDefault('editing_listname', null);
@@ -23,11 +23,21 @@ var TodosRouter = Backbone.Router.extend({
     ":list_id": "main"
   },
   main: function (list_id) {
-    var oldList = Session.get("list_id");
-    if (oldList !== list_id) {
-      Session.set("list_id", "msLZZBvp6ugyeSpoG");  // Hard-codes!!
-      Session.set("list_id_bot", 'NQkynAC2jNgWiTgG9');
-    }
+    // if (!Session.get("list_ids")) {
+    //   var today = new Date();
+    //       slugsToFind = findDateWindow(today),
+    //       defaultListsToShow = Lists.find({slug: {$in: slugsToFind}}),
+    //       defaultSlugsToShow = [];
+
+    //   for (ind = 0; ind < defaultListsToShow.length; ind++) {
+    //     defaultSlugsToShow.push(defaultListsToShow[ind]._id);
+    //   }
+    //   Session.set("list_ids", defaultSlugsToShow);
+    // }
+    // var oldList = Session.get("list_id");
+    // if (oldList !== list_id) {
+    //   Session.set("list_ids", ["msLZZBvp6ugyeSpoG", "NQkynAC2jNgWiTgG9"]);  // Hard-codes!!
+    // }
   },
   setList: function (list_id) {
     this.navigate(list_id, true);
@@ -43,12 +53,6 @@ Meteor.startup(function () {
 // Subscribe to 'lists' collection on startup.
 // Select a list once data has arrived.
 var listsHandle = Meteor.subscribe('lists', function () {
-
-  if (!Session.get('list_id')) {
-    var list = Lists.findOne({}, {sort: {name: 1}});
-    if (list)
-      Router.setList(list._id);
-  }
 
   // Create new date-centered lists depending on the day
   var today = new Date();
@@ -67,15 +71,33 @@ var listsHandle = Meteor.subscribe('lists', function () {
     }
   }
 
+  var slugsToFind = findDateWindow(today),
+      defaultListsToShow = Lists.find({slug: {$in: slugsToFind}}),
+      defaultIdsToShow = [];
+
+  defaultListsToShow.forEach(function (listToShow) {
+    defaultIdsToShow.push(listToShow._id);
+  })
+  // for (ind = 0; ind < defaultListsToShow.length; ind++) {
+  //   defaultSlugsToShow.push(defaultListsToShow[ind]._id);
+  // }
+  Session.set("list_ids", defaultIdsToShow);
+
+  // debugger;
+  // if (!Session.get('list_ids')) {
+  //   var list = Lists.findOne({}, {sort: {name: 1}});
+  //   if (list)
+  //     Router.setList(list._id);
+  // }
+
 });
 
 var todosHandle = null;
 // Always be subscribed to the todos for the selected list.
 Deps.autorun(function () {
-  var list_id = Session.get('list_id'),
-      list_id_bot = Session.get('list_id_bot');
-  if (list_id) {
-    todosHandle = Meteor.subscribe('todos', [list_id, list_id_bot]);
+  var list_ids = Session.get('list_ids');
+  if (list_ids) {
+    todosHandle = Meteor.subscribe('todos', list_ids);
     // todosHandleBot = Meteor.subscribe('todos', list_id_bot);
   } else
     todosHandle = null;
@@ -173,14 +195,13 @@ Template.date_list_panels.all_panels = function () {
     };
   }
 
-  var list_id_top = Session.get('list_id'),
-      list_id_bot = Session.get('list_id_bot');
+  var list_ids = Session.get('list_ids');
 
   var returnArray = {
     'top': topArray,
     'bottom': {
       'list_name': 'Bottom List',
-      'list_id': list_id_bot
+      'list_id': list_ids[1]
     }
   };
 
