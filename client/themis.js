@@ -13,6 +13,11 @@ Session.setDefault('editing_listname', null);
 // When editing todo text, ID of the todo
 Session.setDefault('editing_itemname', null);
 
+Session.setDefault('topRowType', "me");
+Session.setDefault('botRowType', "work");
+Session.setDefault('topRowProps', {'type': Session.get('topRowType')});
+Session.setDefault('botRowProps', {'type': Session.get('botRowType')});
+
 
 
 
@@ -23,21 +28,7 @@ var TodosRouter = Backbone.Router.extend({
     ":list_id": "main"
   },
   main: function (list_id) {
-    // if (!Session.get("list_ids")) {
-    //   var today = new Date();
-    //       slugsToFind = findDateWindow(today),
-    //       defaultListsToShow = Lists.find({slug: {$in: slugsToFind}}),
-    //       defaultSlugsToShow = [];
-
-    //   for (ind = 0; ind < defaultListsToShow.length; ind++) {
-    //     defaultSlugsToShow.push(defaultListsToShow[ind]._id);
-    //   }
-    //   Session.set("list_ids", defaultSlugsToShow);
-    // }
-    // var oldList = Session.get("list_id");
-    // if (oldList !== list_id) {
-    //   Session.set("list_ids", ["msLZZBvp6ugyeSpoG", "NQkynAC2jNgWiTgG9"]);  // Hard-codes!!
-    // }
+    // Here's where we used to calculate the list ids to show
   },
   setList: function (list_id) {
     this.navigate(list_id, true);
@@ -77,18 +68,9 @@ var listsHandle = Meteor.subscribe('lists', function () {
 
   defaultListsToShow.forEach(function (listToShow) {
     defaultIdsToShow.push(listToShow._id);
-  })
-  // for (ind = 0; ind < defaultListsToShow.length; ind++) {
-  //   defaultSlugsToShow.push(defaultListsToShow[ind]._id);
-  // }
-  Session.set("list_ids", defaultIdsToShow);
+  });
 
-  // debugger;
-  // if (!Session.get('list_ids')) {
-  //   var list = Lists.findOne({}, {sort: {name: 1}});
-  //   if (list)
-  //     Router.setList(list._id);
-  // }
+  Session.set("list_ids", defaultIdsToShow);
 
 });
 
@@ -98,7 +80,6 @@ Deps.autorun(function () {
   var list_ids = Session.get('list_ids');
   if (list_ids) {
     todosHandle = Meteor.subscribe('todos', list_ids);
-    // todosHandleBot = Meteor.subscribe('todos', list_id_bot);
   } else
     todosHandle = null;
 });
@@ -185,65 +166,89 @@ Template.date_list_panels.all_panels = function () {
   var dateSlug = moment(today).format("YYYYMMDD");
 
   var todaysList = Lists.findOne({date_list: true, slug: dateSlug});
+  var list_ids = Session.get('list_ids');
 
   if (!(todaysList)) {
     return {};
-  } else {
-    topArray = {
-      'list_name': todaysList.name,
-      'list_id': todaysList._id
-    };
   }
 
-  var list_ids = Session.get('list_ids');
-
   var returnArray = {
-    'top': topArray,
-    'bottom': {
-      'list_name': 'Bottom List',
-      'list_id': list_ids[1]
-    }
+    'top': [list_ids[0], list_ids[1], list_ids[2], list_ids[3]],
+    'bottom': [list_ids[0], list_ids[1], list_ids[2], list_ids[3]]
   };
 
   return returnArray;
 };
 
-Template.indiv_list.todos = function () {
-  // Given a list_id, returns the Todos of that list
-  return Todos.find({list_id: this.list_id});
+Template.top_indiv_list.listProps = function() {
+  return Session.get('topRowProps');
 };
 
-Template.indiv_list.loading = function () {
+Template.top_indiv_list.this_list = function() {
+  return Lists.findOne({_id: this.toString()});
+};
+
+Template.top_indiv_list.todos = function () {
+  // Given a list_id, returns the Todos of that list
+  return Todos.find({list_id: this.toString(), type: Session.get('topRowType')});
+};
+
+Template.top_indiv_list.loading = function () {
   // return todosHandle && !todosHandle.ready();
   return false;
 };
 
-Template.indiv_list.any_list_selected = function () {
-  // return !Session.equals('list_id', null);
-  return true;
-};
-
-Template.indiv_list.list_id = function() {
-  return this.list_id;
-};
-
 // Events
 
-Template.indiv_list.events(okCancelEvents(
+Template.top_indiv_list.events(okCancelEvents(
   '#new-todo',
   {
     ok: function (text, evt) {
+      var thisList = Lists.findOne({_id: this.toString()});
       Todos.insert({
         text: text,
-        list_id: this.list_id,
         done: false,
+        list_id: thisList._id,
         timestamp: (new Date()).getTime(),
-        test: false
+        type: Session.get('topRowType')
       });
       evt.target.value = '';
     }
   }));
 
+
+
+Template.bot_indiv_list.this_list = function() {
+  return Lists.findOne({_id: this.toString()});
+};
+
+Template.bot_indiv_list.todos = function () {
+  // Given a list_id, returns the Todos of that list
+  return Todos.find({list_id: this.toString(), type: Session.get('botRowType')});
+};
+
+Template.bot_indiv_list.loading = function () {
+  // return todosHandle && !todosHandle.ready();
+  return false;
+};
+
+// Events
+
+Template.bot_indiv_list.events(okCancelEvents(
+  '#new-todo',
+  {
+    ok: function (text, evt) {
+      var thisList = Lists.findOne({_id: this.toString()});
+      Todos.insert({
+        text: text,
+        done: false,
+        list_id: thisList._id,
+        timestamp: (new Date()).getTime(),
+        type: Session.get('botRowType')
+      });
+      evt.target.value = '';
+    }
+  }));
 
 
 

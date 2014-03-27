@@ -183,6 +183,11 @@ h3 {
 #items-view {
     margin-top: 5px;
     margin-left: 5px;
+
+    display: inline-block;
+    float: left;
+    width: 23%;
+    height: 95%;
 }
 
 #item-list .todo {

@@ -4,6 +4,15 @@
 // "blur" events on a text input (given by selector) and interprets them
 // as "ok" or "cancel".
 
+if (Meteor.isClient) {
+  Handlebars.registerHelper('topRowProps',function(input){
+    return Session.get("topRowProps");
+  });
+  Handlebars.registerHelper('botRowProps',function(input){
+    return Session.get("botRowProps");
+  });
+}
+
 okCancelEvents = function (selector, callbacks) {
   var ok = callbacks.ok || function () {};
   var cancel = callbacks.cancel || function () {};
@@ -36,7 +45,7 @@ activateInput = function (input) {
 
 findDateWindow = function (focus_date) {
   var totalPanes = 4,  // HARD-CODE
-      startBack = -1;  // HARD-CODE
+      startBack = 0;  // HARD-CODE
 
   var dateSlugs = [];
   for (var ind = 0; ind < totalPanes; ind++) {

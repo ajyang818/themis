@@ -44,19 +44,25 @@
 
 <template name="date_list_panels">
   <div id="todo-panel-top">
-    <div class="todo-panel-title">{{ all_panels.top.list_name }}</div>
-    {{> indiv_list all_panels.top }}
+    {{#each all_panels.top }}
+      <div id="items-view" data-list-slug="{{ this }}" data-list-type="{{ topRowProps.type }}">
+        {{> top_indiv_list }}
+      </div>
+    {{/each }}
   </div>
 
   <div id="todo-panel-bottom">
-    <div class="todo-panel-title">{{ all_panels.bottom.list_name }}</div>
-    {{> indiv_list all_panels.bottom }}
+    {{#each all_panels.bottom }}
+      <div id="items-view" data-list-slug="{{ this }}" data-list-type="{{ botRowProps.type }}">
+        {{> bot_indiv_list }}
+      </div>
+    {{/each }}
   </div>
 </template>
 
 
-<template name="indiv_list">
-  <div id="items-view" data-list-slug="{{ list_id }}">
+<template name="top_indiv_list">
+    <div class="todo-panel-title">{{ this_list.name }}</div>
     {{#if loading}}
       Loading...
     {{else}}
@@ -69,7 +75,22 @@
         {{/each}}
       </ul>
     {{/if}}
-  </div>
+</template>
+
+<template name="bot_indiv_list">
+    <div class="todo-panel-title">{{ this_list.name }}</div>
+    {{#if loading}}
+      Loading...
+    {{else}}
+      <div id="new-todo-box">
+        <input type="text" id="new-todo" placeholder="New item" />
+      </div>
+      <ul id="item-list">
+        {{#each todos}}
+          {{> todo_item}}
+        {{/each}}
+      </ul>
+    {{/if}}
 </template>
 
 
