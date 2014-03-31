@@ -3,16 +3,62 @@
 </head>
 
 <body>
-  <div id="main-pane">
-    {{> date_list_panels }}
+  <div id="themis-header" class="meta-section">THEMIS</div>
+  <div id="main-pane" class="meta-section">
+    {{> rowCreator }}
   </div>
-
-  <div id="side-pane">
-    {{> lists}}
-  </div>
+  <div id="themis-footer" class="meta-section">(Under Construction)</div>
 </body>
 
 
+<template name="rowCreator">
+    {{#if loading}}
+        <div id="lists">Loading...</div>
+    {{else}}
+        <div id="top-row">
+            {{#each all_panels.top }}
+                <div id="items-view" data-list-slug="{{ this }}" data-list-type="{{ topRowProps.type }}">
+                    {{> top_indiv_list }}
+                </div>
+            {{/each }}
+        </div>
+
+        <div id="mid-row">
+            {{#each all_panels.middle }}
+                <div id="items-view" data-list-slug="{{ this }}" data-list-type="{{ botRowProps.type }}">
+                    {{> mid_indiv_list }}
+                </div>
+            {{/each }}
+        </div>
+
+        <div id="bot-row">
+            {{#each all_panels.bottom}}
+<!--                 <div class="list {{selected}}">
+                {{#if editing}}
+                    <div class="edit">
+                        <input class="list-name-input" id="list-name-input" type="text" value="{{name}}" />
+                    </div>
+                {{else}}
+                    <div class="display">
+                        <a class="list-name {{name_class}}" href="/{{_id}}">
+                            {{name}}
+                        </a>
+                    </div>
+                {{/if}}
+                </div> -->
+                <div id="items-view" data-list-slug="{{ this }}" data-list-type="{{ botRowProps.type }}">
+                    {{> mid_indiv_list }}
+                </div>
+            {{/each}}
+
+            <div id="createList">
+                <input type="text" id="new-list" placeholder="New list" />
+            </div>
+        </div>
+    {{/if}}
+</template>
+
+<!--
 <template name="lists">
   <h3>Todo Lists</h3>
   {{#if loading}}
@@ -40,9 +86,9 @@
     </div>
   {{/if}}
 </template>
+ -->
 
-
-<template name="date_list_panels">
+<!-- <template name="date_list_panels">
   <div id="todo-panel-top">
     {{#each all_panels.top }}
       <div id="items-view" data-list-slug="{{ this }}" data-list-type="{{ topRowProps.type }}">
@@ -58,7 +104,7 @@
       </div>
     {{/each }}
   </div>
-</template>
+</template> -->
 
 
 <template name="top_indiv_list">
@@ -77,7 +123,7 @@
     {{/if}}
 </template>
 
-<template name="bot_indiv_list">
+<template name="mid_indiv_list">
     <div class="todo-panel-title">{{ this_list.name }}</div>
     {{#if loading}}
       Loading...

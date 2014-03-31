@@ -6,6 +6,7 @@ Todos = new Meteor.Collection("todos");
 
 // ID of currently selected list
 Session.setDefault('list_ids', null);
+Session.setDefault('customListIds', null);
 
 // When editing a list name, ID of the list
 Session.setDefault('editing_listname', null);
@@ -72,6 +73,15 @@ var listsHandle = Meteor.subscribe('lists', function () {
 
   Session.set("list_ids", defaultIdsToShow);
 
+  var customLists = Lists.find({date_list: false}),
+      customIdsToShow = [];
+
+  customLists.forEach(function (customListToShow) {
+    customIdsToShow.push(customListToShow._id);
+  });
+
+  Session.set("customListIds", customIdsToShow);
+
 });
 
 var todosHandle = null;
@@ -91,29 +101,29 @@ Deps.autorun(function () {
 
 // Template Logic
 
-Template.lists.loading = function () {
+Template.rowCreator.loading = function () {
   return !listsHandle.ready();
 };
 
-Template.lists.lists = function () {
-  return Lists.find({});
-};
+// Template.lists.lists = function () {
+//   return Lists.find({date_list: false});
+// };
 
-Template.lists.selected = function () {
-  return Session.equals('list_id', this._id) ? 'selected' : '';
-};
+// Template.lists.selected = function () {
+//   return Session.equals('list_id', this._id) ? 'selected' : '';
+// };
 
-Template.lists.name_class = function () {
-  return this.name ? '' : 'empty';
-};
+// Template.lists.name_class = function () {
+//   return this.name ? '' : 'empty';
+// };
 
-Template.lists.editing = function () {
-  return Session.equals('editing_listname', this._id);
-};
+// Template.lists.editing = function () {
+//   return Session.equals('editing_listname', this._id);
+// };
 
 // Events
 
-Template.lists.events({
+Template.rowCreator.events({
   'mousedown .list': function (evt) { // select list
     Router.setList(this._id);
   },
@@ -129,17 +139,20 @@ Template.lists.events({
 });
 
 // Attach events to keydown, keyup, and blur on "New list" input box.
-Template.lists.events(okCancelEvents(
+Template.rowCreator.events(okCancelEvents(
   '#new-list',
   {
     ok: function (text, evt) {
-      var id = Lists.insert({name: text});
-      Router.setList(id);
+      Lists.insert({
+        name: text,
+        date_list: false
+      });
+      // Router.setList(id);
       evt.target.value = "";
     }
   }));
 
-Template.lists.events(okCancelEvents(
+Template.rowCreator.events(okCancelEvents(
   '#list-name-input',
   {
     ok: function (value) {
@@ -158,7 +171,7 @@ Template.lists.events(okCancelEvents(
 
 // Template Logic
 
-Template.date_list_panels.all_panels = function () {
+Template.rowCreator.all_panels = function () {
   // Returns the set of all panels that are going to be shown
   // Should be divided into top, bottom
 
@@ -174,7 +187,8 @@ Template.date_list_panels.all_panels = function () {
 
   var returnArray = {
     'top': [list_ids[0], list_ids[1], list_ids[2], list_ids[3]],
-    'bottom': [list_ids[0], list_ids[1], list_ids[2], list_ids[3]]
+    'middle': [list_ids[0], list_ids[1], list_ids[2], list_ids[3]],
+    'bottom': Session.get('customListIds')
   };
 
   return returnArray;
@@ -218,23 +232,23 @@ Template.top_indiv_list.events(okCancelEvents(
 
 
 
-Template.bot_indiv_list.this_list = function() {
+Template.mid_indiv_list.this_list = function() {
   return Lists.findOne({_id: this.toString()});
 };
 
-Template.bot_indiv_list.todos = function () {
+Template.mid_indiv_list.todos = function () {
   // Given a list_id, returns the Todos of that list
   return Todos.find({list_id: this.toString(), type: Session.get('botRowType')});
 };
 
-Template.bot_indiv_list.loading = function () {
+Template.mid_indiv_list.loading = function () {
   // return todosHandle && !todosHandle.ready();
   return false;
 };
 
 // Events
 
-Template.bot_indiv_list.events(okCancelEvents(
+Template.mid_indiv_list.events(okCancelEvents(
   '#new-todo',
   {
     ok: function (text, evt) {
