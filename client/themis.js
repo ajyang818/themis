@@ -68,7 +68,8 @@ var listsHandle = Meteor.subscribe('lists', function () {
   var slugsToFind = findDateWindow(today),
       defaultListsToShow = Lists.find({slug: {$in: slugsToFind}}),
       customLists = Lists.find({date_list: false}),
-      defaultIdsToShow = [];
+      defaultIdsToShow = [],
+      customListIds = [];
 
   defaultListsToShow.forEach(function (listToShow) {
     defaultIdsToShow.push(listToShow._id);
@@ -76,9 +77,11 @@ var listsHandle = Meteor.subscribe('lists', function () {
 
   customLists.forEach(function (customListToShow) {
     defaultIdsToShow.push(customListToShow._id);
+    customListIds.push(customListToShow._id);
   });
 
   Session.set("list_ids", defaultIdsToShow);
+  Session.set("customListIds", customListIds);
 
 });
 
@@ -103,49 +106,18 @@ Template.rowCreator.loading = function () {
   return !listsHandle.ready();
 };
 
-// Template.lists.lists = function () {
-//   return Lists.find({date_list: false});
-// };
-
-// Template.lists.selected = function () {
-//   return Session.equals('list_id', this._id) ? 'selected' : '';
-// };
-
-// Template.lists.name_class = function () {
-//   return this.name ? '' : 'empty';
-// };
-
-// Template.lists.editing = function () {
-//   return Session.equals('editing_listname', this._id);
-// };
-
-// Events
-
-Template.rowCreator.events({
-  'mousedown .list': function (evt) { // select list
-    Router.setList(this._id);
-  },
-  'click .list': function (evt) {
-    // prevent clicks on <a> from refreshing the page.
-    evt.preventDefault();
-  },
-  'dblclick .list': function (evt, tmpl) { // start editing list name
-    Session.set('editing_listname', this._id);
-    Deps.flush(); // force DOM redraw, so we can focus the edit field
-    activateInput(tmpl.find("#list-name-input"));
-  }
-});
-
 // Attach events to keydown, keyup, and blur on "New list" input box.
 Template.rowCreator.events(okCancelEvents(
   '#new-list',
   {
     ok: function (text, evt) {
-      Lists.insert({
+      newListId = Lists.insert({
         name: text,
         date_list: false
       });
-      // Router.setList(id);
+
+      Session.set('customListIds', Session.get('customListIds').push(newListId));
+      Session.set('list_ids', Session.get('list_ids').push(newListId));
       evt.target.value = "";
     }
   }));
@@ -186,7 +158,7 @@ Template.rowCreator.all_panels = function () {
   var returnArray = {
     'top': [list_ids[0], list_ids[1], list_ids[2], list_ids[3]],
     'middle': [list_ids[0], list_ids[1], list_ids[2], list_ids[3]],
-    'bottom': Session.get('customListIds')
+    'bottom': Session.get('customListIds').slice(0, 3)
   };
 
   return returnArray;

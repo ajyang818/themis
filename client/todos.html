@@ -11,6 +11,7 @@
 </body>
 
 
+
 <template name="rowCreator">
     {{#if loading}}
         <div id="lists">Loading...</div>
@@ -45,53 +46,7 @@
     {{/if}}
 </template>
 
-<!--
-<template name="lists">
-  <h3>Todo Lists</h3>
-  {{#if loading}}
-    <div id="lists">Loading...</div>
-  {{else}}
-    <div id="lists">
-      {{#each lists}}
-        <div class="list {{selected}}">
-          {{#if editing}}
-            <div class="edit">
-              <input class="list-name-input" id="list-name-input" type="text" value="{{name}}" />
-            </div>
-          {{else}}
-            <div class="display">
-              <a class="list-name {{name_class}}" href="/{{_id}}">
-                {{name}}
-              </a>
-            </div>
-          {{/if}}
-        </div>
-      {{/each}}
-    </div>
-    <div id="createList">
-      <input type="text" id="new-list" placeholder="New list" />
-    </div>
-  {{/if}}
-</template>
- -->
 
-<!-- <template name="date_list_panels">
-  <div id="todo-panel-top">
-    {{#each all_panels.top }}
-      <div id="items-view" data-list-slug="{{ this }}" data-list-type="{{ topRowProps.type }}">
-        {{> top_indiv_list }}
-      </div>
-    {{/each }}
-  </div>
-
-  <div id="todo-panel-bottom">
-    {{#each all_panels.bottom }}
-      <div id="items-view" data-list-slug="{{ this }}" data-list-type="{{ botRowProps.type }}">
-        {{> bot_indiv_list }}
-      </div>
-    {{/each }}
-  </div>
-</template> -->
 
 
 <template name="top_indiv_list">
@@ -141,6 +96,8 @@
       </ul>
     {{/if}}
 </template>
+
+
 
 
 <template name="todo_item">

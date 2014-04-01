@@ -7,17 +7,6 @@ ul {
     list-style: none;
 }
 
-/*html, body {
-    height: 100%;
-}*/
-
-/*body {
-    font-size: 16px;
-    line-height: 1.5;
-    background: #eeeeee;
-    color: #333333;
-}*/
-
 body, input {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -38,32 +27,10 @@ h3 {
     text-align: center;
 }
 
-/*#top-tag-filter, #main-pane, #main-pane, #side-pane, #bottom-pane {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    overflow: hidden;
-}
-*/
-
 body {
     margin: 0;
 }
 
-/*#top-tag-filter {
-    left: 200px;
-    height: 44px;
-    bottom: auto;
-    background: #ddd;
-    border-bottom: 1px solid #999;
-}
-*/
-/*#help {
-    padding: 8px;
-}
-*/
 .meta-section {
     overflow: hidden;
     position: absolute;
@@ -91,11 +58,6 @@ body {
     margin: 0;
     top: 2.5rem;
     bottom: 2.5rem;
-    /*top: 45px;*/
-    /*bottom: 0;*/
-    /*left: 220px;*/
-    /*height: 67%;*/
-    /*overflow: auto;*/
 }
 
 #top-row {
