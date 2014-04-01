@@ -72,17 +72,16 @@ body {
 }
 
 #themis-header {
-    /*height: 5%;*/
     font-weight: bold;
     margin-left: 10px;
     border-bottom: 1px gray solid;
-    line-height: 2.5rem;
-    height: 2.5rem;
+    line-height: 2rem;
+    height: 2rem;
 }
 
 #themis-footer {
-    line-height: 2.5rem;
-    height: 2.5rem;
+    line-height: 2rem;
+    height: 2rem;
     bottom: 0;
     margin-left: 10px;
     border-top: 1px gray solid;
@@ -102,11 +101,13 @@ body {
 #top-row {
     height: 33%;
     display: block;
+    border-bottom: 1px gray solid;
 }
 
 #mid-row {
     height: 33%;
     display: block;
+    border-bottom: 1px gray solid;
 }
 
 #bot-third {
@@ -216,11 +217,11 @@ body {
 #new-todo-box {
     margin-top: 10px;
     margin-bottom: 10px;
-    margin-left: 60px;
-    margin-right: 20px;
-    font-size: 160%;
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 100%;
     position: relative;
-    height: 40px;
+    height: 1.0rem;
 }
 
 #new-todo {
@@ -228,19 +229,20 @@ body {
    width: 100%;
 }
 
-#items-view {
-    margin-top: 5px;
-    margin-left: 5px;
-
+.indiv-list {
     display: inline-block;
     float: left;
     width: 23%;
-    height: 95%;
+    height: 100%;
+    border-right: 1px gray solid;
 }
+
+
+
 
 #item-list .todo {
     display: block;
-    height: 50px;
+    height: 1.5rem;
     position: relative;
     overflow: hidden;
     border-top: 1px solid #ccc;
@@ -249,19 +251,19 @@ body {
 #item-list .todo .destroy {
     cursor: pointer;
     position: absolute;
-    left: 5px;
-    top: 15px;
+    left: 10px;
+    top: 2px;
     height: 20px;
     width: 20px;
 }
 
 #item-list .todo .display, #item-list .todo .edit {
-    margin-left: 30px;
+    margin-left: 10px;
     height: 100%;
     width: auto;
     float: left;
-    padding-top: 18px;
-    line-height: 1;
+    padding-top: 5px;
+    line-height: 1rem;
 }
 
 #todo-input {

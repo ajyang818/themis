@@ -15,8 +15,10 @@ Session.setDefault('editing_listname', null);
 Session.setDefault('editing_itemname', null);
 
 Session.setDefault('topRowType', "me");
-Session.setDefault('botRowType', "work");
+Session.setDefault('midRowType', "work");
+Session.setDefault('botRowType', "custom");
 Session.setDefault('topRowProps', {'type': Session.get('topRowType')});
+Session.setDefault('midRowProps', {'type': Session.get('midRowType')});
 Session.setDefault('botRowProps', {'type': Session.get('botRowType')});
 
 
@@ -65,22 +67,18 @@ var listsHandle = Meteor.subscribe('lists', function () {
 
   var slugsToFind = findDateWindow(today),
       defaultListsToShow = Lists.find({slug: {$in: slugsToFind}}),
+      customLists = Lists.find({date_list: false}),
       defaultIdsToShow = [];
 
   defaultListsToShow.forEach(function (listToShow) {
     defaultIdsToShow.push(listToShow._id);
   });
 
-  Session.set("list_ids", defaultIdsToShow);
-
-  var customLists = Lists.find({date_list: false}),
-      customIdsToShow = [];
-
   customLists.forEach(function (customListToShow) {
-    customIdsToShow.push(customListToShow._id);
+    defaultIdsToShow.push(customListToShow._id);
   });
 
-  Session.set("customListIds", customIdsToShow);
+  Session.set("list_ids", defaultIdsToShow);
 
 });
 
@@ -230,7 +228,7 @@ Template.top_indiv_list.events(okCancelEvents(
     }
   }));
 
-
+/////////// Middle Row
 
 Template.mid_indiv_list.this_list = function() {
   return Lists.findOne({_id: this.toString()});
@@ -238,7 +236,7 @@ Template.mid_indiv_list.this_list = function() {
 
 Template.mid_indiv_list.todos = function () {
   // Given a list_id, returns the Todos of that list
-  return Todos.find({list_id: this.toString(), type: Session.get('botRowType')});
+  return Todos.find({list_id: this.toString(), type: Session.get('midRowType')});
 };
 
 Template.mid_indiv_list.loading = function () {
@@ -249,6 +247,40 @@ Template.mid_indiv_list.loading = function () {
 // Events
 
 Template.mid_indiv_list.events(okCancelEvents(
+  '#new-todo',
+  {
+    ok: function (text, evt) {
+      var thisList = Lists.findOne({_id: this.toString()});
+      Todos.insert({
+        text: text,
+        done: false,
+        list_id: thisList._id,
+        timestamp: (new Date()).getTime(),
+        type: Session.get('midRowType')
+      });
+      evt.target.value = '';
+    }
+  }));
+
+/////////// Bottom Row
+
+Template.bot_indiv_list.this_list = function() {
+  return Lists.findOne({_id: this.toString()});
+};
+
+Template.bot_indiv_list.todos = function () {
+  // Given a list_id, returns the Todos of that list
+  return Todos.find({list_id: this.toString(), type: Session.get('botRowType')});
+};
+
+Template.bot_indiv_list.loading = function () {
+  // return todosHandle && !todosHandle.ready();
+  return false;
+};
+
+// Events
+
+Template.bot_indiv_list.events(okCancelEvents(
   '#new-todo',
   {
     ok: function (text, evt) {
