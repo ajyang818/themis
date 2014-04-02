@@ -40,39 +40,52 @@ body {
 
 #themis-header {
     font-weight: bold;
-    margin-left: 10px;
+    padding-left: 10px;
     border-bottom: 1px gray solid;
     line-height: 2rem;
     height: 2rem;
+
+}
+
+#themis-logo {
+    display: inline-block;
+    vertical-align: middle;
+    height: 1.5rem;
+    width: 1.5rem;
+}
+
+#themis-name {
+    display: inline-block;
+    vertical-align: middle;
 }
 
 #themis-footer {
     line-height: 2rem;
     height: 2rem;
     bottom: 0;
-    margin-left: 10px;
+    padding-left: 10px;
     border-top: 1px gray solid;
 }
 
 #main-pane {
     margin: 0;
-    top: 2.5rem;
-    bottom: 2.5rem;
+    top: 2rem;
+    bottom: 2rem;
 }
 
 #top-row {
     height: 33%;
     display: block;
-    border-bottom: 1px gray solid;
+    border-bottom: 1px gray dashed;
 }
 
 #mid-row {
     height: 33%;
     display: block;
-    border-bottom: 1px gray solid;
+    border-bottom: 2px gray solid;
 }
 
-#bot-third {
+#bot-row {
     height: 33%;
     display: block;
 }
@@ -167,15 +180,6 @@ body {
     text-decoration: none;
 }
 
-#createList {
-    padding: 3px 6px;
-    margin-top: 5px;
-}
-
-#createList input {
-    width: 180px;
-}
-
 #new-todo-box {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -194,13 +198,20 @@ body {
 .indiv-list {
     display: inline-block;
     float: left;
-    width: 23%;
+    width: 24.5%;
     height: 100%;
     border-right: 1px gray solid;
 }
 
 
 
+
+.indiv-list #new-list {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+}
 
 #item-list .todo {
     display: block;

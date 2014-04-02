@@ -3,7 +3,10 @@
 </head>
 
 <body>
-  <div id="themis-header" class="meta-section">THEMIS</div>
+  <div id="themis-header" class="meta-section">
+    <img src="themis-logo.png" id="themis-logo" />&nbsp;
+    <span id="themis-name">THEMIS</span>
+  </div>
   <div id="main-pane" class="meta-section">
     {{> rowCreator }}
   </div>
@@ -39,7 +42,7 @@
                 </div>
             {{/each}}
 
-            <div id="createList">
+            <div id="createList" class="indiv-list">
                 <input type="text" id="new-list" placeholder="New list" />
             </div>
         </div>
