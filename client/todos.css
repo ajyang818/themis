@@ -75,6 +75,26 @@ body {
     display: inline-block;
     float: left;
     border-right: 1px dashed gray;
+    text-align: center;
+}
+
+#left-gutter:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -0.25em; /* Adjusts for spacing */
+}
+
+/* The element to be centered, can
+   also be of any width and height */
+#left-gutter-contents {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#left-gutter-contents .ion-chevron-left {
+    font-size: 50px;
 }
 
 #rows-wrapper{
@@ -89,6 +109,26 @@ body {
     height: 100%;
     display: inline-block;
     border-left: 1px dashed gray;
+    text-align: center;
+}
+
+#right-gutter:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -0.25em; /* Adjusts for spacing */
+}
+
+/* The element to be centered, can
+   also be of any width and height */
+#right-gutter-contents {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#right-gutter-contents .ion-chevron-right {
+    font-size: 50px;
 }
 
 #main-pane {

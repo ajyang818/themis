@@ -1,0 +1,17 @@
+{
+  "meteor": {},
+  "dependencies": {
+    "basePackages": {
+      "ionicons": {
+        "version": "1.4.1"
+      }
+    },
+    "packages": {
+      "ionicons": {
+        "git": "https://github.com/Pagebakers/meteor-ionicons.git",
+        "tag": "v1.4.1",
+        "commit": "c3c07eba87d42ef900c9c61323ce4499bdce3204"
+      }
+    }
+  }
+}
