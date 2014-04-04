@@ -8,6 +8,9 @@ if (Meteor.isClient) {
   Handlebars.registerHelper('topRowProps',function(input){
     return Session.get("topRowProps");
   });
+  Handlebars.registerHelper('midRowProps',function(input){
+    return Session.get("midRowProps");
+  });
   Handlebars.registerHelper('botRowProps',function(input){
     return Session.get("botRowProps");
   });

@@ -1,6 +1,9 @@
 * {
     padding: 0;
     margin: 0;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 ul {
@@ -66,8 +69,30 @@ body {
     border-top: 1px gray solid;
 }
 
+#left-gutter {
+    width: 5%;
+    height: 100%;
+    display: inline-block;
+    float: left;
+    border-right: 1px dashed gray;
+}
+
+#rows-wrapper{
+    width: 90%;
+    height: 100%;
+    display: inline-block;
+    float: left;
+}
+
+#right-gutter {
+    width: 5%;
+    height: 100%;
+    display: inline-block;
+    border-left: 1px dashed gray;
+}
+
 #main-pane {
-    margin: 0;
+
     top: 2rem;
     bottom: 2rem;
 }
@@ -85,7 +110,7 @@ body {
 }
 
 #bot-row {
-    height: 33%;
+    height: 34%;
     display: block;
 }
 
@@ -197,12 +222,13 @@ body {
 .indiv-list {
     display: inline-block;
     float: left;
-    width: 24.5%;
+    width: 25%;
     height: 100%;
-    border-right: 1px gray solid;
 }
 
-
+.indiv-list:not(:last-child) {
+    border-right: 1px gray solid;
+}
 
 
 .indiv-list #new-list {
