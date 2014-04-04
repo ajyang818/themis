@@ -4,8 +4,8 @@
 
 <body>
   <div id="themis-header" class="meta-section">
-    <img src="themis-logo.png" id="themis-logo" />&nbsp;
-    <span id="themis-name">THEMIS</span>
+    <img src="themis-logo.png" id="themis-logo" />
+    <span id="themis-name">&nbsp;THEMIS</span>
   </div>
   <div id="main-pane" class="meta-section">
     {{> rowCreator }}
@@ -110,11 +110,11 @@
         <input id="todo-input" type="text" value="{{text}}" />
       </div>
     {{else}}
-      <div class="destroy"></div>
       <div class="display">
         <input class="check" name="markdone" type="checkbox" checked={{ isDone }} />
         <div class="todo-text">{{text}}</div>
       </div>
+      <div class="destroy"></div>
     {{/if}}
   </li>
 </template>
