@@ -78,7 +78,12 @@ body {
     text-align: center;
 }
 
-#left-gutter:before {
+#left-gutter-top-two-thirds {
+    height: 66%;
+    border-bottom: 2px gray solid;
+}
+
+#left-gutter-top-two-thirds:before {
   content: '';
   display: inline-block;
   height: 100%;
@@ -112,7 +117,12 @@ body {
     text-align: center;
 }
 
-#right-gutter:before {
+#right-gutter-top-two-thirds {
+    height: 66%;
+    border-bottom: 2px gray solid;
+}
+
+#right-gutter-top-two-thirds:before {
   content: '';
   display: inline-block;
   height: 100%;
