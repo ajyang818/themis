@@ -7,6 +7,7 @@ Todos = new Meteor.Collection("todos");
 // ID of currently selected list
 Session.setDefault('list_ids', null);
 Session.setDefault('customListIds', null);
+Session.setDefault('centeredDate', null);
 
 // When editing a list name, ID of the list
 Session.setDefault('editing_listname', null);
@@ -24,7 +25,7 @@ Session.setDefault('botRowProps', {'type': Session.get('botRowType')});
 
 
 
-////////// Tracking selected list in URL //////////
+////////// Startup //////////
 
 var TodosRouter = Backbone.Router.extend({
   routes: {
@@ -48,40 +49,22 @@ Meteor.startup(function () {
 // Select a list once data has arrived.
 var listsHandle = Meteor.subscribe('lists', function () {
 
-  // Create new date-centered lists depending on the day
-  var today = new Date();
-  today.setHours(0, 0, 0, 0);
-  for (var ind = 0; ind <= 7; ind++) {
-
-    var dateToCheck = new Date(today.getFullYear(), today.getMonth(), today.getDate() + ind);
-    var dateSlug = moment(dateToCheck).format("YYYYMMDD");
-
-    if (!(Lists.find({date_list: true, slug: dateSlug}).count())) {
-      Lists.insert({
-        name: moment(dateToCheck).format("ddd - MMM D, YYYY"),
-        date_list: true,
-        slug: dateSlug,
-      });
-    }
-  }
-
-  var slugsToFind = findDateWindow(today),
-      defaultListsToShow = Lists.find({slug: {$in: slugsToFind}}),
-      customLists = Lists.find({date_list: false}),
-      defaultIdsToShow = [],
+  // First, grab the customLists we want to show...
+  var customLists = Lists.find({date_list: false}),
       customListIds = [];
 
-  defaultListsToShow.forEach(function (listToShow) {
-    defaultIdsToShow.push(listToShow._id);
-  });
-
   customLists.forEach(function (customListToShow) {
-    defaultIdsToShow.push(customListToShow._id);
     customListIds.push(customListToShow._id);
   });
 
-  Session.set("list_ids", defaultIdsToShow);
   Session.set("customListIds", customListIds);
+
+  // Then, recenter the date lists around today
+  var today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  recenterDateWindow(today);
+  // This sets both Session variables list_ids and centeredDate
 
 });
 
@@ -94,6 +77,28 @@ Deps.autorun(function () {
   } else
     todosHandle = null;
 });
+
+
+
+
+////////// Screen //////////
+
+Template.screen.events({
+  'click #move-dates-left': function () {
+    var oldDate = Session.get('centeredDate'),
+        newDate = new Date(oldDate.getFullYear(), oldDate.getMonth(), oldDate.getDate() - 1);
+
+    recenterDateWindow(newDate);
+  },
+
+  'click #move-dates-right': function () {
+    var oldDate = Session.get('centeredDate'),
+        newDate = new Date(oldDate.getFullYear(), oldDate.getMonth(), oldDate.getDate() + 1);
+
+    recenterDateWindow(newDate);
+  }
+});
+
 
 
 
@@ -267,6 +272,7 @@ Template.bot_indiv_list.events(okCancelEvents(
       evt.target.value = '';
     }
   }));
+
 
 
 

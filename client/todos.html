@@ -3,6 +3,11 @@
 </head>
 
 <body>
+  {{> screen}}
+</body>
+
+
+<template name="screen">
   <div id="themis-header" class="meta-section">
     <img src="themis-logo.png" id="themis-logo" />
     <span id="themis-name">&nbsp;THEMIS</span>
@@ -11,7 +16,7 @@
   <div id="main-pane" class="meta-section">
     <div id="left-gutter">
       <span id="left-gutter-contents">
-        <i class="icon ion-chevron-left"></i>
+        <i class="icon ion-chevron-left" id="move-dates-left"></i>
       </span>
     </div>
 
@@ -21,20 +26,22 @@
 
     <div id="right-gutter">
       <span id="right-gutter-contents">
-        <i class="icon ion-chevron-right"></i>
+        <i class="icon ion-chevron-right" id="move-dates-right"></i>
       </span>
     </div>
   </div>
 
   <div id="themis-footer" class="meta-section">(Under Construction)</div>
-</body>
-
+</template>
 
 
 <template name="rowCreator">
     {{#if loading}}
         <div id="lists">Loading...</div>
     {{else}}
+<!--         <div id="top-row-gutter">
+            ALLEN
+        </div> -->
         <div id="top-row">
             {{#each all_panels.top }}
                 <div class="indiv-list" data-list-slug="{{ this }}" data-list-type="{{ topRowProps.type }}">
@@ -43,6 +50,9 @@
             {{/each }}
         </div>
 
+<!--         <div id="mid-row-gutter">
+            WORK
+        </div> -->
         <div id="mid-row">
             {{#each all_panels.middle }}
                 <div class="indiv-list" data-list-slug="{{ this }}" data-list-type="{{ midRowProps.type }}">
@@ -51,6 +61,9 @@
             {{/each }}
         </div>
 
+<!--         <div id="bot-row-gutter">
+            OTHER
+        </div> -->
         <div id="bot-row">
             {{#each all_panels.bottom}}
                 <div class="indiv-list" data-list-slug="{{ this }}" data-list-type="{{ botRowProps.type }}">

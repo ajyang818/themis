@@ -70,7 +70,7 @@ body {
 }
 
 #left-gutter {
-    width: 5%;
+    width: 3%;
     height: 100%;
     display: inline-block;
     float: left;
@@ -98,14 +98,14 @@ body {
 }
 
 #rows-wrapper{
-    width: 90%;
+    width: 94%;
     height: 100%;
     display: inline-block;
     float: left;
 }
 
 #right-gutter {
-    width: 5%;
+    width: 3%;
     height: 100%;
     display: inline-block;
     border-left: 1px dashed gray;
@@ -141,6 +141,21 @@ body {
     height: 33%;
     display: block;
     border-bottom: 1px gray dashed;
+}
+
+#top-row-gutter {
+    width: 2%;
+    height: 33%;
+    display: inline-block;
+    writing-mode: bt-lr;
+}
+
+#mid-row-gutter {
+    width: 2%;
+}
+
+#bot-row-gutter {
+    width: 2%;
 }
 
 #mid-row {
@@ -374,4 +389,3 @@ body {
 #edittag-input {
     width: 80px;
 }
-
