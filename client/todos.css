@@ -4,6 +4,8 @@
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+    /*color: #024A2F;  Dark Green*/
+    color: #032747;
 }
 
 ul {
@@ -45,6 +47,7 @@ body {
     font-weight: bold;
     border-bottom: 1px gray solid;
     height: 2rem;
+    background-color: #032747;
 }
 
 #themis-logo {
@@ -59,6 +62,7 @@ body {
     display: inline-block;
     vertical-align: middle;
     height: 100%;
+    color: white;
 }
 
 #themis-footer {
@@ -67,6 +71,9 @@ body {
     bottom: 0;
     padding-left: 10px;
     border-top: 1px gray solid;
+    background-color: #032747;
+    color: white;
+    font-weight: bold;
 }
 
 #left-gutter {
