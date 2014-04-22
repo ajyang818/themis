@@ -74,14 +74,18 @@
         </div> -->
         <div id="bot-row">
             {{#each all_panels.bottom}}
+              {{#if this}}
                 <div class="indiv-list" data-list-slug="{{ this }}" data-list-type="{{ botRowProps.type }}">
                     {{> bot_indiv_list }}
                 </div>
+              {{else}}
+                <div id="createList" class="indiv-list">
+                    <i class="ion-plus-circled new-list-plus"></i>
+                    <input type="text" id="new-list" placeholder="New list" />
+                </div>
+              {{/if}}
             {{/each}}
 
-            <div id="createList" class="indiv-list">
-                <input type="text" id="new-list" placeholder="New list" />
-            </div>
         </div>
     {{/if}}
 </template>

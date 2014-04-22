@@ -160,11 +160,22 @@ Template.rowCreator.all_panels = function () {
     return {};
   }
 
+  var customListsToShow = Session.get('customListIds').slice(0, 3);
+
+  if (customListsToShow.length < 4) {
+    var startLength = customListsToShow.length;
+    for (ind = 0; ind < (4 - startLength); ind++) {
+      customListsToShow.push(null);
+    }
+  }
+
   var returnArray = {
     'top': [list_ids[0], list_ids[1], list_ids[2], list_ids[3]],
     'middle': [list_ids[0], list_ids[1], list_ids[2], list_ids[3]],
-    'bottom': Session.get('customListIds').slice(0, 3)
+    'bottom': customListsToShow
   };
+
+  Session.set('customListIds', customListsToShow);
 
   return returnArray;
 };
