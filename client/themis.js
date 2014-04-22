@@ -121,8 +121,23 @@ Template.rowCreator.events(okCancelEvents(
         date_list: false
       });
 
-      Session.set('customListIds', Session.get('customListIds').push(newListId));
-      Session.set('list_ids', Session.get('list_ids').push(newListId));
+      var customListIds = Session.get('customListIds'),
+          allListIds = Session.get('list_ids');
+      customListIds.splice(customListIds.indexOf(null), 0, newListId);
+      debugger;
+      var foundNull = false;
+      for (ind = 0; ind < customListIds.length; ind++) {
+        if (!foundNull && customListIds[ind] === null) {
+          foundNull = true;
+        } else if (foundNull && customListIds[ind] === null && ind > 3) {
+          customListIds = customListIds.slice(0, ind);
+        }
+      }
+
+      allListIds.push(newListId);
+
+      Session.set('customListIds', customListIds);
+      Session.set('list_ids', allListIds);
       evt.target.value = "";
     }
   }));
